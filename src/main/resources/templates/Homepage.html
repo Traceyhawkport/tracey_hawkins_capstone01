@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Homepage</title>
+  <!-- Add Bootstrap CSS CDN or local files -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <style>
+    .logo-link {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .footer {
+      background-color: #ffffff;
+    }
+
+    .card {
+      width: 300px;
+      height: 300px;
+    }
+
+    .card-img-top {
+      object-fit: cover;
+      height: 100px;
+      width: 100%;
+    }
+
+    .blurry-img {
+      filter: blur(5px);
+    }
+  </style>
+</head>
+
+<body>
+<!-- Header -->
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-white">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="https://live.staticflickr.com/65535/52901198720_b04b263c25_h.jpg" alt="Logo" height="30">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
+        <a class="btn btn-light ml-3" href="/login">Logout</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Page content -->
+<div class="container">
+  <div class="row">
+    <div class="col-md-4"th:each="project : ${projects}">
+      <div class="card">
+        <img src="https://live.staticflickr.com/65535/52901198720_b04b263c25_h.jpg" class="card-img-top blurry-img"
+             alt="Project Image">
+        <div class="card-body">
+          <h5 class="card-title"th:text="${project.Name}">Project 1</h5>
+          <p class="card-text"th:text="${project.description}">Description of Project 1</p>
+          <a th:href="@{projectworkspace/{id}(id=${project.id})}" class="btn btn-primary">View Project</a>
+          <a th:href="@{/deleteproject/{id}(id=${project.id})}" class="btn btn-danger">Delete Project</a>
+
+        </div>
+      </div>
+    </div>
+    </div>
+
+</div>
+<div class="text-center">
+  <a class="btn btn-primary" th:href="@{/newproject}">Create New Project</a>
+</div>
+
+
+<!-- Footer -->
+<footer class="bg-white text-dark text-center py-3">
+  <p>&copy; 2023 My Website. All rights reserved.</p>
+</footer>
+
+<!-- Add Bootstrap JS CDN or local files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

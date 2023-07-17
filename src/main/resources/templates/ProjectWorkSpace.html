@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>My Website</title>
+    <!-- Add Bootstrap CSS CDN or local files -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .logo-link {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .footer {
+            background-color: #ffffff;
+        }
+
+        .card {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        #taskInput {
+            width: 100%;
+            height: 40px;
+            padding: 10px;
+            border: none;
+            background-color: black;
+            color:limegreen;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+<!-- Header -->
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-white">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://live.staticflickr.com/65535/52901198720_b04b263c25_h.jpg" alt="Logo" height="30">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+                <a class="btn btn-light ml-3" href="/login">Logout</a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Page content -->
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <img id="logo" src="https://live.staticflickr.com/65535/52901198720_b04b263c25_h.jpg" alt="App Logo"
+                 height="50">
+            <form id="createTaskForm">
+                <input id="taskInput" type="text" placeholder="Enter a task" th:value="${taskText}"
+                       onkeypress="handleKeyPress(event)">
+                <input type="submit" value="Create Task" style="display: none;">
+            </form>
+            <ul id="taskList">
+                <li th:each="task : ${tasks}">
+                    <h2 th:text="${task.name}"></h2>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-white text-dark text-center py-3">
+    <p>&copy; 2023 My Website. All rights reserved.</p>
+</footer>
+
+<!-- Add Bootstrap JS CDN or local files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+
+        function createTask() {
+            const taskInput = document.getElementById('taskInput');
+            const taskText = taskInput.value.trim();
+            console.log(`${project.id}`);
+            fetch('/create/{project.id}', {
+               method: 'POST',
+              headers: {
+                   'Content-Type': 'text/plain'
+                },
+                body: taskText
+            })
+        }
+        function saveForLater() {
+         if (taskText) {
+                const listItem = document.createElement('li');
+                listItem.className = 'taskItem';
+                const randomColor = Math.random() < 0.5 ? 'pinkBox' : 'seaGreenBox';
+                listItem.classList.add(randomColor);
+
+                const taskTextElement = document.createElement('span');
+                taskTextElement.className = 'taskText';
+                taskTextElement.textContent = taskText;
+
+             const deleteButton = document.createElement('button');
+deleteButton.className = 'btn btn-sm btn-danger';
+deleteButton.textContent = 'Delete';
+deleteButton.style.backgroundColor = '#fcb7f8';
+deleteButton.onclick = function () {
+    deleteTask(this);
+};
+
+
+           const updateButton = document.createElement('button');
+updateButton.className = 'btn btn-sm btn-primary';
+updateButton.textContent = 'Update';
+updateButton.style.backgroundColor = '#27A2AF';
+updateButton.onclick = function () {
+    updateTask(this);
+};
+
+
+                const taskActions = document.createElement('div');
+                taskActions.className = 'taskActions';
+                taskActions.appendChild(deleteButton);
+                taskActions.appendChild(updateButton);
+
+                listItem.appendChild(taskTextElement);
+                listItem.appendChild(taskActions);
+
+                const taskList = document.getElementById('taskList');
+                taskList.appendChild(listItem);
+
+                taskInput.value = '';
+            }
+        }
+
+
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                createTask();
+            }
+        }
+
+        function deleteTask(element) {
+            const taskItem = element.closest('.taskItem');
+            taskItem.remove();
+        }
+
+        function updateTask(element) {
+            const taskItem = element.closest('.taskItem');
+            const taskTextElement = taskItem.querySelector('.taskText');
+            const newTaskText = prompt('Enter the new task text:');
+            if (newTaskText) {
+                taskTextElement.textContent = newTaskText;
+            }
+        }
+
+</script>
+</body>
+
+</html>
